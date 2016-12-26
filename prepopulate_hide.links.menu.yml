@@ -1,0 +1,5 @@
+prepopulate_hide.admin_settings:
+  route_name: prepopulate_hide.admin_settings
+  title: 'Prepopulate hide'
+  description: 'Configure fields to hide when prepopulated.'
+  parent: system.admin_config_ui

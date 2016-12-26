@@ -1,0 +1,7 @@
+prepopulate_hide.admin_settings:
+  path: /admin/config/user-interface/prepopulate-hide
+  defaults:
+    _title: 'Prepopulate Hide'
+    _form: \Drupal\prepopulate_hide\Form\SettingsForm
+  requirements:
+    _permission: 'administer prepopulate hide'

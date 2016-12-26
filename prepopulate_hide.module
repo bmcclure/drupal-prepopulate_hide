@@ -1,0 +1,79 @@
+<?php
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function prepopulate_hide_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (prepopulate_hide_form_is_included($form_id)) {
+    $form['#after_build'][] = 'prepopulate_hide_after_build';
+  }
+}
+
+function prepopulate_hide_after_build($form) {
+  $config = \Drupal::config('prepopulate_hide.settings');
+
+  $newLines = '/(\r\n|\r|\n)/';
+
+  $includedFields = preg_split($newLines, $config->get('included_fields'));
+
+  foreach ($includedFields as $fieldName) {
+    if (isset($form[$fieldName])) {
+
+      if (isset($form[$fieldName]['widget']['#value']) && !empty($form[$fieldName]['widget']['#value'])) {
+        $form[$fieldName]['widget']['#access'] = FALSE;
+      }
+    }
+  }
+
+  return $form;
+}
+
+function prepopulate_hide_form_is_included($form_id) {
+  $config = \Drupal::config('prepopulate_hide.settings');
+
+  $newLines = '/(\r\n|\r|\n)/';
+
+  $includedForms = preg_split($newLines, $config->get('included_forms'));
+  $excludedForms = preg_split($newLines, $config->get('excluded_forms'));
+
+  $include = FALSE;
+
+  foreach ($includedForms as $search) {
+    $search = trim($search);
+
+    if (!$search) {
+      continue;
+    }
+
+    if (strpos($search, '/') === 0) {
+      if (preg_match($search, $form_id)) {
+        $include = TRUE;
+
+        break;
+      }
+    } elseif ($form_id == $search) {
+      $include = TRUE;
+
+      break;
+    }
+  }
+
+  if ($include && !empty($excludedForms)) {
+    foreach ($excludedForms as $search) {
+      if (strpos($search, '/') === 0) {
+        if (preg_match($search, $form_id)) {
+          $include = FALSE;
+
+          break;
+        }
+      } elseif ($form_id == $search) {
+        $include = FALSE;
+
+        break;
+      }
+    }
+  }
+
+  return $include;
+}

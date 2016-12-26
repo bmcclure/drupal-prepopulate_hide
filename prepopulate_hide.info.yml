@@ -1,0 +1,8 @@
+name: Prepopulate Hide
+type: module
+description: 'Allows hiding of defined fields when their values are prepopulated.'
+version: 8.x-1.x
+core: 8.x
+package: Fields
+dependencies:
+  - prepopulate

@@ -1,0 +1,8 @@
+{
+  "name": "drupal/prepopulate_hide",
+  "type": "drupal-module",
+  "description": "Prepopulate Hide",
+  "homepage": "https://github.com/TopFloorTech/drupal-prepopulate_hide",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev"
+}
