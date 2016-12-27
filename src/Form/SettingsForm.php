@@ -22,6 +22,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('included_forms', $form_state->getValue('included_forms'))
       ->set('excluded_forms', $form_state->getValue('excluded_forms'))
       ->set('included_fields', $form_state->getValue('included_fields'))
+      ->set('prepopulate_from_current_page', $form_state->getValue('prepopulate_from_current_page'))
       ->save();
 
     parent::submitForm($form, $form_state);
@@ -59,7 +60,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['fields'] = [
       '#type' => 'details',
-      '#open' => TRUE,
+      '#open' => FALSE,
       '#title' => $this->t('Fields'),
     ];
 
@@ -68,6 +69,19 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Included fields'),
       '#description' => $this->t('A list of field machine names to include in the matched forms.'),
       '#default_value' => $config->get('included_fields'),
+    ];
+
+    $form['prepopulate'] = [
+      '#type' => 'details',
+      '#open' => FALSE,
+      '#title' => $this->t('Prepopulate'),
+    ];
+
+    $form['prepopulate']['prepopulate_from_current_page'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Prepopulate from current page'),
+      '#description' => $this->t('Specify a list of form IDs and fields, pipe-separated, which should be pre-populated from the current request entity. These fields can then be hidden with the settings above.'),
+      '#default_value' => $config->get('prepopulate_from_current_page'),
     ];
 
     return parent::buildForm($form, $form_state);

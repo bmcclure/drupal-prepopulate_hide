@@ -8,6 +8,23 @@ function prepopulate_hide_form_alter(&$form, FormStateInterface $form_state, $fo
   if (prepopulate_hide_form_is_included($form_id)) {
     $form['#after_build'][] = 'prepopulate_hide_after_build';
   }
+
+  $config = \Drupal::config('prepopulate_hide.settings');
+
+  $newLines = '/(\r\n|\r|\n)/';
+
+  $prepopulateFields = preg_split($newLines, $config->get('prepopulate_from_current_page'));
+
+  foreach ($prepopulateFields as $prepopulateField) {
+    list($formId, $fieldName) = explode('|', $prepopulateField);
+
+    if ($formId == $form_id) {
+      $node_id = \Drupal::routeMatch()->getRawParameter('node');
+      if (!empty($node_id)) {
+        $form[$fieldName]['widget']['#default_value'] = $node_id;
+      }
+    }
+  }
 }
 
 function prepopulate_hide_after_build($form) {
