@@ -1,0 +1,7 @@
+prepopulate_hide:
+  version: VERSION
+  js:
+    js/prepopulate_hide.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

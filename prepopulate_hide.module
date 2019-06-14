@@ -36,9 +36,11 @@ function prepopulate_hide_after_build($form) {
 
   foreach ($includedFields as $fieldName) {
     if (isset($form[$fieldName])) {
-
-      if (isset($form[$fieldName]['widget']['#value']) && !empty($form[$fieldName]['widget']['#value'])) {
-        $form[$fieldName]['widget']['#access'] = FALSE;
+      if ((isset($form[$fieldName]['#value']) && !empty($form[$fieldName]['#value']))
+        || (isset($form[$fieldName]['widget']['#value']) && !empty($form[$fieldName]['widget']['#value']))
+      ) {
+        $form[$fieldName]['#attributes']['class'][] = 'prepopulate-hide';
+        $form['#attached']['library'][] = 'prepopulate_hide/prepopulate_hide';
       }
     }
   }
